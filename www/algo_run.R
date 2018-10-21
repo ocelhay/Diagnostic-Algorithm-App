@@ -3,22 +3,53 @@ algo_run <- function(name_disease_1,
                      name_disease_3,
                      name_disease_4,
                      name_disease_5,
+                     
                      incidence_dis_1,
                      incidence_dis_2,
                      incidence_dis_3,
                      incidence_dis_4,
                      incidence_dis_5,
+                     
                      sensitivity_dis_1,
                      sensitivity_dis_2,
                      sensitivity_dis_3,
                      sensitivity_dis_4,
                      sensitivity_dis_5,
+                     
                      specificity_dis_1,
                      specificity_dis_2,
                      specificity_dis_3,
                      specificity_dis_4,
                      specificity_dis_5,
                      incidence_dis_other){
+  
+  
+  
+  # for testing
+  # name_disease_1 = "Malaria"
+  # name_disease_2 = "Dengue"
+  # name_disease_3 = "Scrub"
+  # name_disease_4 = "Typhoid"
+  # name_disease_5 = "Leptospira"
+  # incidence_dis_1 = 3
+  # incidence_dis_2 = 7
+  # incidence_dis_3 = 4
+  # incidence_dis_4 = 1
+  # incidence_dis_5 = 4
+  # sensitivity_dis_1 = 95
+  # sensitivity_dis_2 = 84
+  # sensitivity_dis_3 = 73
+  # sensitivity_dis_4 = 69
+  # sensitivity_dis_5 = 71
+  # specificity_dis_1 = 95
+  # specificity_dis_2 = 94
+  # specificity_dis_3 = 97
+  # specificity_dis_4 = 90
+  # specificity_dis_5 = 65
+  # incidence_dis_other = 0
+  
+  
+  
   
   x <- 10000  # number of simulations
   
@@ -179,9 +210,7 @@ algo_run <- function(name_disease_1,
   
   # -------------------------------------------------------------------------------------
   
-  time_end <- Sys.time()
-  print(paste0("Execution in ", round(time_end - time_start, 4)))
-  
+  # Text output
   OUTCD <- OUTCD[, !(apply(OUTCD, 2, sum) == 0)]
   
   print(OUTCD)
@@ -191,10 +220,12 @@ algo_run <- function(name_disease_1,
   
   # Plot 1
   d1 <- data_frame(names = perm_name[a1, ], diagnosis = OUTpropCD[a1, 1:r])
+  print(d1)
   d1$names <- factor(d1$names, levels = unique(d1$names)[order(d1$diagnosis, decreasing = TRUE)])
   
   # Plot 2
   d2 <- data_frame(names = perm_name[a1, ], predictive = OUTPPV[a1, 1:r])
+  print(d2)
   d2$names <- factor(d2$names, levels = unique(d2$names)[order(d2$predictive, decreasing = TRUE)])
   
   
@@ -231,6 +262,7 @@ algo_run <- function(name_disease_1,
     mutate(n = 1:n()) %>%
     filter(n < r*20)
   
+  print(d3)
   return(list(best_algo = paste(perm_name[a1, ], collapse = " => "),
               d1 = d1,
               d2 = d2,

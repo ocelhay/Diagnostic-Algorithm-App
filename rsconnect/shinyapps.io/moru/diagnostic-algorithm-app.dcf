@@ -1,0 +1,13 @@
+name: diagnostic-algorithm-app
+title: diagnostic-algorithm-app
+username:
+account: moru
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 526535
+bundleId: 1653690
+url: https://moru.shinyapps.io/diagnostic-algorithm-app/
+when: 1540093718.94048
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .gitattributes|README.md

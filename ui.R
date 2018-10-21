@@ -18,7 +18,7 @@ shinyUI(fluidPage(
                        fluidRow(
                          column(width = 4, sliderInput("incidence_dis_1", "Incidence", value = 3, min = 0, max = 60)),
                          column(width = 4, sliderInput("sensitivity_dis_1", "Sensitivity", value = 95, min = 0, max = 100)),
-                         column(width = 4, sliderInput("specificty_dis_1", "Specificity", value = 95, min = 0, max = 100))
+                         column(width = 4, sliderInput("specificity_dis_1", "Specificity", value = 95, min = 0, max = 100))
                          ),
                        hr()
       ),
@@ -29,7 +29,7 @@ shinyUI(fluidPage(
                        fluidRow(
                          column(width = 4, sliderInput("incidence_dis_2", "Incidence", value = 7, min = 0, max = 60)),
                          column(width = 4, sliderInput("sensitivity_dis_2", "Sensitivity", value = 84, min = 0, max = 100)),
-                         column(width = 4, sliderInput("specificty_dis_2", "Specificity", value = 94, min = 0, max = 100))
+                         column(width = 4, sliderInput("specificity_dis_2", "Specificity", value = 94, min = 0, max = 100))
                        ),
                        hr()
       ),
@@ -40,7 +40,7 @@ shinyUI(fluidPage(
                        fluidRow(
                          column(width = 4, sliderInput("incidence_dis_3", "Incidence", value = 4, min = 0, max = 60)),
                          column(width = 4, sliderInput("sensitivity_dis_3", "Sensitivity", value = 73, min = 0, max = 100)),
-                         column(width = 4, sliderInput("specificty_dis_3", "Specificity", value = 97, min = 0, max = 100))
+                         column(width = 4, sliderInput("specificity_dis_3", "Specificity", value = 97, min = 0, max = 100))
                        ),
                        hr()
       ),
@@ -51,7 +51,7 @@ shinyUI(fluidPage(
                        fluidRow(
                          column(width = 4, sliderInput("incidence_dis_4", "Incidence", value = 1, min = 0, max = 60)),
                          column(width = 4, sliderInput("sensitivity_dis_4", "Sensitivity", value = 69, min = 0, max = 100)),
-                         column(width = 4, sliderInput("specificty_dis_4", "Specificity", value = 90, min = 0, max = 100))
+                         column(width = 4, sliderInput("specificity_dis_4", "Specificity", value = 90, min = 0, max = 100))
                        ),
                        hr()
       ),
@@ -62,7 +62,7 @@ shinyUI(fluidPage(
                        fluidRow(
                          column(width = 4, sliderInput("incidence_dis_5", "Incidence", value = 4, min = 0, max = 60)),
                          column(width = 4, sliderInput("sensitivity_dis_5", "Sensitivity", value = 71, min = 0, max = 100)),
-                         column(width = 4, sliderInput("specificty_dis_5", "Specificity", value = 65, min = 0, max = 100))
+                         column(width = 4, sliderInput("specificity_dis_5", "Specificity", value = 65, min = 0, max = 100))
                        ),
                        hr()
       ),
