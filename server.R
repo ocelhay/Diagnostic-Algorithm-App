@@ -7,81 +7,93 @@ library(tidyverse) # important to load after plyr
 library(shiny)
 
 source("./www/algo_run.R")
-x <- 10000  # number of simulations
-
 
 
 shinyServer(function(input, output, session) {
   
   algo_output <- reactiveValues(
-    data = data.frame(NULL)
+    a1 = list(NULL)
   )
   
-  # Number of diseases
-  # name_diseases <- reactiveVal(c(input$name_disease_1, input$name_disease_2, input$name_disease_3, input$name_disease_4, input$name_disease_5))
-  # r <- reactiveVal(sum(name_diseases() != ""))
-  # n <- reactiveVal(r())
-  # 
-  # inc <- reactiveVal(c(input$incidence_dis_1, input$incidence_dis_2, input$incidence_dis_3, input$incidence_dis_4, input$incidence_dis_5))
-  # sn <- reactiveVal(c(input$sensitivity_dis_1, input$sensitivity_dis_2, input$sensitivity_dis_3, input$sensitivity_dis_4, input$sensitivity_dis_5))
-  # sp <- reactiveVal(c(input$specificity_dis_1, input$specificity_dis_2, input$specificity_dis_3, input$specificity_dis_4, input$specificity_dis_5))
-  # 
-  # perm <- reactiveVal(NULL)
-  # perm_name <- reactiveVal(NULL)
-  # OUTpropCD <- reactiveVal(NULL)
-  # OUTsumCD <- reactiveVal(NULL)
-  # OUTPPV <- reactiveVal(NULL)
-  # OUTNPV <- reactiveVal(NULL)
-  # OUTCCD <- reactiveVal(NULL)
-  # OUTCD <- reactiveVal(NULL)
-  
-  
-  # Action when "Run Simul" is pressed
+  # Call to algo_run function when "Run Simul" is pressed
   observeEvent(input$run_simul, {
     
-    algo_output$data <- algo_run(incidence_dis_1 = input$incidence_dis_1,
-                            incidence_dis_2 = input$incidence_dis_2)
+    showNotification(HTML("<h2>Model Running...</h2>"), duration = NULL, type = "warning", id = "model", session = session)
     
-    # perm(permutations(n(), r(), v = 1:n())) # possible combinations
-    # 
-    # #data frame of required data
-    # perm_name <- perm()
-    # perm_name[perm() == 1] <- name_diseases()[1]
-    # perm_name[perm() == 2] <- name_diseases()[2]
-    # perm_name[perm() == 3] <- name_diseases()[3]
-    # perm_name[perm() == 4] <- name_diseases()[4]
-    # perm_name[perm() == 5] <- name_diseases()[5]
-    # 
-    # lp <- nrow(perm())  #length of permutation vector
+    algo_output$data <- algo_run(
+      name_disease_1 = input$name_disease_1,
+      name_disease_2 = input$name_disease_2,
+      name_disease_3 = input$name_disease_3,
+      name_disease_4 = input$name_disease_4,
+      name_disease_5 = input$name_disease_5,
+      
+      incidence_dis_1 = input$incidence_dis_1,
+      incidence_dis_2 = input$incidence_dis_2,
+      incidence_dis_3 = input$incidence_dis_3,
+      incidence_dis_4 = input$incidence_dis_4,
+      incidence_dis_5 = input$incidence_dis_5,
+      
+      sensitivity_dis_1 = input$sensitivity_dis_1,
+      sensitivity_dis_2 = input$sensitivity_dis_2,
+      sensitivity_dis_3 = input$sensitivity_dis_3,
+      sensitivity_dis_4 = input$sensitivity_dis_4,
+      sensitivity_dis_5 = input$sensitivity_dis_5,
+      
+      specificity_dis_1 = input$specificity_dis_1,
+      specificity_dis_2 = input$specificity_dis_2,
+      specificity_dis_3 = input$specificity_dis_3,
+      specificity_dis_4 = input$specificity_dis_4,
+      specificity_dis_5 = input$specificity_dis_5,
+      incidence_dis_other = input$incidence_dis_other
+      )
     
-    # OUTpropCD() <- matrix(NA, lp, 5) # proportion of correct diagnosis for each diagnosis
-    # OUTsumCD() <- c()                # total correct diagnosis
-    # OUTPPV() <- matrix(NA, lp, 5)    # positive predictive value for each disease diagnosis
-    # OUTNPV() <- matrix(NA, lp, 5)    # negative predictive value for each disease diagnosis
-    # OUTCCD() <- matrix(NA, lp, 5)    # cumulative correct diagnosis after every test for each algorithm 
-    # OUTCD() <- matrix(NA, lp, 5)     # correct diagnosis for each test
-    
+    removeNotification(id = "model", session = session)
+    showNotification(HTML("<h2>Model successfully run!</h2>"), duration = 3, type = "message")
   }
   )
   
+  
+  output$best_algo <- renderText({
+    req(input$run_simul)
+    
+    paste0(algo_output$data$best_algo)
+  })
    
   output$plot_cd <- renderPlot({
-    req(algo_output)
-    plot(1, main = paste("There are ", algo_output$data, " permutations"))
+    req(input$run_simul)
     
-    
+    ggplot(algo_output$data$d1, aes(x = names, y = diagnosis, label = round(diagnosis, 2))) +
+      geom_bar(stat = "identity") +
+      geom_label() + 
+      labs(x = "Disease", y = "Correct Diagnosis", fill = "Disease") +
+      theme_bw(base_size = 14) +
+      theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+      coord_cartesian(ylim = c(0, 1))
   })
   
   output$plot_ppv <- renderPlot({
+    req(input$run_simul)
     
-    plot(1)
-    
+    ggplot(algo_output$data$d2, aes(x = names, y = predictive, label = round(predictive, 2))) +
+      geom_bar(stat = "identity") +
+      geom_label() +
+      labs(x = "Disease", y = "Predictive Value", fill = "Disease") +
+      theme_bw(base_size = 14) +
+      theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+      coord_cartesian(ylim = c(0, 1))
   })
   
   output$plot_algo <- renderPlot({
+    req(input$run_simul)
     
-    plot(1)
-    
+    ggplot(algo_output$data$d3, aes(x = reorder(Algorithm, -`Correctly Diagnosed`), y = `Correctly Diagnosed Test`, fill = `Test Name`)) +
+      geom_bar(stat = "identity") +
+      scale_fill_brewer(palette = "Set1") + 
+      labs(main = "Algorithms from best to worst (limited to 20)", x = "Algorithm", y = "Proportions of cases correctly diagnosed",
+           fill = "Disease") +
+      theme_bw(base_size = 13) +
+      theme(axis.text.x = element_text(angle = 75, hjust=1)) +
+      coord_cartesian(ylim = c(0, 1))
   })
   
 })
