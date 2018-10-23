@@ -56,7 +56,7 @@ shinyServer(function(input, output, session) {
   output$best_algo <- renderText({
     req(input$run_simul)
     
-    paste0(algo_output$data$best_algo)
+    paste0(algo_output$data$algo_1, "<br>", algo_output$data$algo_2, "<br>", algo_output$data$algo_3)
   })
    
   output$plot_cd <- renderPlot({
@@ -86,13 +86,14 @@ shinyServer(function(input, output, session) {
   output$plot_algo <- renderPlot({
     req(input$run_simul)
     
-    ggplot(algo_output$data$d3, aes(x = reorder(Algorithm, -`Correctly Diagnosed`), y = `Correctly Diagnosed Test`, fill = `Test Name`)) +
-      geom_bar(stat = "identity") +
+    
+    ggplot(algo_output$data$d3, aes(x = reorder(Algorithm, -`Correctly Diagnosed`), y = `Correctly Diagnosed Test`, fill = `Test Name`, group = -Position)) +
+      geom_bar(position = "stack", stat = "identity") +
       scale_fill_brewer(palette = "Set1") + 
-      labs(main = "Algorithms from best to worst (limited to 20)", x = "Algorithm", y = "Proportions of cases correctly diagnosed",
+      labs(title = "Algorithms from best to worst", sub = "limited to 30 best algorithms", x = "Algorithm", y = "Proportions of cases correctly diagnosed",
            fill = "Disease") +
       theme_bw(base_size = 13) +
-      theme(axis.text.x = element_text(angle = 75, hjust=1)) +
+      theme(axis.text.x = element_text(angle = 70, hjust=1), legend.position = "left") +
       coord_cartesian(ylim = c(0, 1))
   })
   

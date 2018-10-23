@@ -215,8 +215,10 @@ algo_run <- function(name_disease_1,
   
   print(OUTCD)
   print(OUTsumCD)
-  a1 <- which(OUTsumCD == max(OUTsumCD))
-  print(a1)
+  
+  a1 <- which(OUTsumCD == sort(OUTsumCD, decreasing = TRUE)[1])[1]
+  a2 <- which(OUTsumCD == sort(OUTsumCD, decreasing = TRUE)[2])[1]
+  a3 <- which(OUTsumCD == sort(OUTsumCD, decreasing = TRUE)[3])[1]
   
   # Plot 1
   d1 <- data_frame(names = perm_name[a1, ], diagnosis = OUTpropCD[a1, 1:r])
@@ -230,40 +232,18 @@ algo_run <- function(name_disease_1,
   
   
   # Plot #3
-  df <- data.frame(perm_name, OUTsumCD, OUTCD, Algo = apply(perm_name, 1, paste, collapse = ", "))
-  
-  # rename columns
-  namekey <- c(X1 = "Test1", X2 = "Test2", X3 = "Test3", X4 = "Test4", X5 = "Test5", 
-               X1.1 = "CD1", X2.1 = "CD2", X3.1 = "CD3", X4.1 = "CD4", X5.1 = "CD5",
-               OUTsumCD = "Correctly Diagnosed", Algo = "Algorithm")
-  names(df) <- namekey[names(df)]
-  
-  df1 <- df %>%
-    select(-contains("CD")) %>%
-    gather(key = "Test", value = "Test Name", -c("Correctly Diagnosed", "Algorithm"))  %>%
-    select(-Test)
-  
-  
-  df2 <- df %>%
-    select(-c(contains("Test"))) %>%
-    select(-"Correctly Diagnosed") %>%
-    gather(key = "Test", value = "Correctly Diagnosed Test", -c("Algorithm"))
-  
-  df2$Test[df2$Test == "CD1"] <- name_diseases[1]
-  df2$Test[df2$Test == "CD2"] <- name_diseases[2]
-  df2$Test[df2$Test == "CD3"] <- name_diseases[3]
-  df2$Test[df2$Test == "CD4"] <- name_diseases[4]
-  df2$Test[df2$Test == "CD5"] <- name_diseases[5]
-  
-  df2 <- df2 %>% rename(`Test Name` = Test)
-  
-  d3 <- join(df1, df2, by =c("Algorithm", "Test Name")) %>% 
+  d3 <- data_frame(`Test Name` = as.vector(perm_name), 
+                    `Correctly Diagnosed Test` = as.vector(OUTCD),
+                    Algorithm = rep(apply(perm_name, 1, paste, collapse = ", "), r), 
+                    `Correctly Diagnosed` = rep(OUTsumCD, times = r),
+                    Position = rep(1:r, each = lp)) %>%
     arrange(desc(`Correctly Diagnosed`)) %>%
     mutate(n = 1:n()) %>%
-    filter(n < r*20)
-  
-  print(d3)
-  return(list(best_algo = paste(perm_name[a1, ], collapse = " => "),
+    filter(n < r*30)
+
+  return(list(algo_1 = paste("Best Algorithm", "(correct diagnosis score = ", sort(OUTsumCD, decreasing = TRUE)[1], "): ", paste(perm_name[a1, ], collapse = " => ")),
+              algo_2 = paste("2nd Best Algorithm", "(correct diagnosis score = ", sort(OUTsumCD, decreasing = TRUE)[2], "): ", paste(perm_name[a2, ], collapse = " => ")),
+              algo_3 = paste("3rd Best Algorithm", "(correct diagnosis score = ", sort(OUTsumCD, decreasing = TRUE)[3], "): ", paste(perm_name[a3, ], collapse = " => ")),
               d1 = d1,
               d2 = d2,
               d3 = d3
