@@ -88,7 +88,7 @@ algo_run <- function(name_disease_1,
   
   time_start <- Sys.time()
   
-  for (j in 1:lp)   #repeats the run for each of lp possible algorithm
+  for (j in 1:lp)   #repeats the run for each of 120 possible algorithm
   {
     print(paste0("Permutation ", j))
     
@@ -126,15 +126,14 @@ algo_run <- function(name_disease_1,
     ri <- incj/(sum(incj)+incx)    #relative incidence 
     cri <- cumsum(ri) #cumulative relative incidence 
     
-    set.seed(1)
+    #set.seed(1)
     rand<-runif(x, 0, 1)  #x random numbers between 0 and 1; each random generates a patient
     
-    set.seed(1)
     rand_unif <- matrix(runif(10*x, 0, 1), x, 10)
     
     for(i in 1:x)
     {
-      #Assign diagnosis based on greatest probability 
+      #Assign diagnosis based on pretest probability 
       v <- which(rand[i] <= cri)
       if(any(v)) ds[i] <- min(v)
     }
@@ -197,15 +196,16 @@ algo_run <- function(name_disease_1,
     NPV<- sumTN/(sumTN+sumFN)
     
     #Outputs
-    OUTpropCD[j,] <- sumCD/dis
-    OUTsumCD[j] <- sum(sumCD)/x
-    OUTPPV[j,] <- PPV
-    OUTNPV[j,] <- NPV
-    OUTCCD[j,] <- CCD/x
-    OUTCD[j,] <- sumCD/x
+    OUTpropCD[j,]<-sumCD/dis
+    OUTsumCD[j]<-sum(sumCD)/x
+    OUTPPV[j,]<-PPV
+    OUTNPV[j,]<-NPV
+    OUTCCD[j,]<-CCD/x
+    OUTCD[j,]<-sumCD/x
   }
   
   time_end <- Sys.time()
+  print(paste0("Execution in ", round(time_end - time_start, 4)))
   print(paste0("Execution in ", round(time_end - time_start, 4)))
   
   # -------------------------------------------------------------------------------------
@@ -223,12 +223,14 @@ algo_run <- function(name_disease_1,
   # Plot 1
   d1 <- data_frame(names = perm_name[a1, ], diagnosis = OUTpropCD[a1, 1:r])
   print(d1)
-  d1$names <- factor(d1$names, levels = unique(d1$names)[order(d1$diagnosis, decreasing = TRUE)])
+  # d1$names <- factor(d1$names, levels = unique(d1$names)[order(d1$diagnosis, decreasing = TRUE)]) # order by magnitude
+  d1$names <- factor(d1$names, levels = d1$names) # order by the algo
   
   # Plot 2
   d2 <- data_frame(names = perm_name[a1, ], predictive = OUTPPV[a1, 1:r])
   print(d2)
-  d2$names <- factor(d2$names, levels = unique(d2$names)[order(d2$predictive, decreasing = TRUE)])
+  # d2$names <- factor(d2$names, levels = unique(d2$names)[order(d2$predictive, decreasing = TRUE)]) # order by magnitude
+  d2$names <- factor(d2$names, levels = d2$names) # order by the algo
   
   
   # Plot #3
@@ -237,9 +239,10 @@ algo_run <- function(name_disease_1,
                     Algorithm = rep(apply(perm_name, 1, paste, collapse = ", "), r), 
                     `Correctly Diagnosed` = rep(OUTsumCD, times = r),
                     Position = rep(1:r, each = lp)) %>%
-    arrange(desc(`Correctly Diagnosed`)) %>%
-    mutate(n = 1:n()) %>%
-    filter(n < r*30)
+    arrange(desc(`Correctly Diagnosed`))
+  # %>%
+  #   mutate(n = 1:n()) %>%
+  #   filter(n < r*30)
 
   return(list(algo_1 = paste("Best Algorithm", "(correct diagnosis score = ", sort(OUTsumCD, decreasing = TRUE)[1], "): ", paste(perm_name[a1, ], collapse = " => ")),
               algo_2 = paste("2nd Best Algorithm", "(correct diagnosis score = ", sort(OUTsumCD, decreasing = TRUE)[2], "): ", paste(perm_name[a2, ], collapse = " => ")),
