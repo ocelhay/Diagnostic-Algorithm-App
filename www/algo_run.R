@@ -4,11 +4,11 @@ algo_run <- function(name_disease_1,
                      name_disease_4,
                      name_disease_5,
                      
-                     incidence_dis_1,
-                     incidence_dis_2,
-                     incidence_dis_3,
-                     incidence_dis_4,
-                     incidence_dis_5,
+                     prevalence_dis_1,
+                     prevalence_dis_2,
+                     prevalence_dis_3,
+                     prevalence_dis_4,
+                     prevalence_dis_5,
                      
                      sensitivity_dis_1,
                      sensitivity_dis_2,
@@ -21,7 +21,7 @@ algo_run <- function(name_disease_1,
                      specificity_dis_3,
                      specificity_dis_4,
                      specificity_dis_5,
-                     incidence_dis_other){
+                     prevalence_dis_other){
   
   
   
@@ -31,11 +31,11 @@ algo_run <- function(name_disease_1,
   # name_disease_3 = "Scrub"
   # name_disease_4 = "Typhoid"
   # name_disease_5 = "Leptospira"
-  # incidence_dis_1 = 3
-  # incidence_dis_2 = 7
-  # incidence_dis_3 = 4
-  # incidence_dis_4 = 1
-  # incidence_dis_5 = 4
+  # prevalence_dis_1 = 3
+  # prevalence_dis_2 = 7
+  # prevalence_dis_3 = 4
+  # prevalence_dis_4 = 1
+  # prevalence_dis_5 = 4
   # sensitivity_dis_1 = 95
   # sensitivity_dis_2 = 84
   # sensitivity_dis_3 = 73
@@ -46,7 +46,7 @@ algo_run <- function(name_disease_1,
   # specificity_dis_3 = 97
   # specificity_dis_4 = 90
   # specificity_dis_5 = 65
-  # incidence_dis_other = 0
+  # prevalence_dis_other = 0
   
   
   
@@ -58,11 +58,11 @@ algo_run <- function(name_disease_1,
   name_diseases <- c(name_disease_1, name_disease_2, name_disease_3, name_disease_4, name_disease_5)[1:r]
   
   
-  inc <- c(incidence_dis_1, incidence_dis_2, incidence_dis_3, incidence_dis_4, incidence_dis_5) # inc of 5 conditions under consideration
+  prev <- c(prevalence_dis_1, prevalence_dis_2, prevalence_dis_3, prevalence_dis_4, prevalence_dis_5) # prev of 5 conditions under consideration
   sn <- c(sensitivity_dis_1, sensitivity_dis_2, sensitivity_dis_3, sensitivity_dis_4, sensitivity_dis_5)/100 # corresponding sensitivity
   sp <- c(specificity_dis_1, specificity_dis_2, specificity_dis_3, specificity_dis_4, specificity_dis_5)/100 # corresponding specificity
   
-  incx <- incidence_dis_other  # inc of other illnesses where tests are done in reality
+  prevx <- prevalence_dis_other  # prev of other illnesses where tests are done in reality
   
   perm <- permutations(n, r, v = 1:n) # possible combinations
   
@@ -119,12 +119,12 @@ algo_run <- function(name_disease_1,
     CD4<- rep(0, x)
     CD5<- rep(0, x)
     
-    incj <- inc[perm[j, ]] 
+    prevj <- prev[perm[j, ]] 
     snj <- sn[perm[j, ]]
     spj <- sp[perm[j, ]]
     
-    ri <- incj/(sum(incj)+incx)    #relative incidence 
-    cri <- cumsum(ri) #cumulative relative incidence 
+    ri <- prevj/(sum(prevj)+prevx)    #relative prevalence 
+    cri <- cumsum(ri) #cumulative relative prevalence 
     
     #set.seed(1)
     rand<-runif(x, 0, 1)  #x random numbers between 0 and 1; each random generates a patient
@@ -213,12 +213,13 @@ algo_run <- function(name_disease_1,
   # Text output
   OUTCD <- OUTCD[, !(apply(OUTCD, 2, sum) == 0)]
   
-  print(OUTCD)
-  print(OUTsumCD)
+  # print(OUTCD)
+  # print(OUTsumCD)
   
   a1 <- which(OUTsumCD == sort(OUTsumCD, decreasing = TRUE)[1])[1]
   a2 <- which(OUTsumCD == sort(OUTsumCD, decreasing = TRUE)[2])[1]
   a3 <- which(OUTsumCD == sort(OUTsumCD, decreasing = TRUE)[3])[1]
+  an <- which(OUTsumCD == sort(OUTsumCD, decreasing = FALSE)[1])[1]
   
   # Plot 1
   d1 <- data_frame(names = perm_name[a1, ], diagnosis = OUTpropCD[a1, 1:r])
@@ -240,13 +241,13 @@ algo_run <- function(name_disease_1,
                     `Correctly Diagnosed` = rep(OUTsumCD, times = r),
                     Position = rep(1:r, each = lp)) %>%
     arrange(desc(`Correctly Diagnosed`))
-  # %>%
-  #   mutate(n = 1:n()) %>%
-  #   filter(n < r*30)
+  
+  print(d3)
 
-  return(list(algo_1 = paste("Best Algorithm", "(correct diagnosis score = ", sort(OUTsumCD, decreasing = TRUE)[1], "): ", paste(perm_name[a1, ], collapse = " => ")),
-              algo_2 = paste("2nd Best Algorithm", "(correct diagnosis score = ", sort(OUTsumCD, decreasing = TRUE)[2], "): ", paste(perm_name[a2, ], collapse = " => ")),
-              algo_3 = paste("3rd Best Algorithm", "(correct diagnosis score = ", sort(OUTsumCD, decreasing = TRUE)[3], "): ", paste(perm_name[a3, ], collapse = " => ")),
+  return(list(algo_1 = paste0("Best Algorithm ", "(correct diagnosis score = ", round(sort(OUTsumCD, decreasing = TRUE)[1], 3), "): ", paste(perm_name[a1, ], collapse = " => ")),
+              algo_2 = paste0("2nd Best Algorithm ", "(correct diagnosis score = ", round(sort(OUTsumCD, decreasing = TRUE)[2], 3), "): ", paste(perm_name[a2, ], collapse = " => ")),
+              algo_3 = paste0("3rd Best Algorithm ", "(correct diagnosis score = ", round(sort(OUTsumCD, decreasing = TRUE)[3], 3), "): ", paste(perm_name[a3, ], collapse = " => ")),
+              algo_n = paste0("Worst Algorithm ", "(correct diagnosis score = ", round(sort(OUTsumCD, decreasing = FALSE)[1], 3), "): ", paste(perm_name[an, ], collapse = " => ")),
               d1 = d1,
               d2 = d2,
               d3 = d3
