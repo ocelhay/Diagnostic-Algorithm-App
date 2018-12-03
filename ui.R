@@ -42,8 +42,8 @@ shinyUI(fluidPage(theme = "styles.css",
                  conditionalPanel(condition = "input.name_disease_2 != ''",
                                   fluidRow(
                                     column(width = 4, numericInput("prevalence_dis_2", "Prevalence (%)", value = 3, min = 0, max = 100)),
-                                    column(width = 4, sliderInput("sensitivity_dis_2", "Sensitivity", value = 84, min = 0, max = 100)),
-                                    column(width = 4, sliderInput("specificity_dis_2", "Specificity", value = 94, min = 0, max = 100))
+                                    column(width = 4, sliderInput("sensitivity_dis_2", "Sensitivity (%)", value = 84, min = 0, max = 100)),
+                                    column(width = 4, sliderInput("specificity_dis_2", "Specificity (%)", value = 94, min = 0, max = 100))
                                   ),
                                   hr()
                  ),
@@ -53,8 +53,8 @@ shinyUI(fluidPage(theme = "styles.css",
                  conditionalPanel(condition = "input.name_disease_3 != ''",
                                   fluidRow(
                                     column(width = 4, numericInput("prevalence_dis_3", "Prevalence (%)", value = 4, min = 0, max = 100)),
-                                    column(width = 4, sliderInput("sensitivity_dis_3", "Sensitivity", value = 73, min = 0, max = 100)),
-                                    column(width = 4, sliderInput("specificity_dis_3", "Specificity", value = 97, min = 0, max = 100))
+                                    column(width = 4, sliderInput("sensitivity_dis_3", "Sensitivity (%)", value = 73, min = 0, max = 100)),
+                                    column(width = 4, sliderInput("specificity_dis_3", "Specificity (%)", value = 97, min = 0, max = 100))
                                   ),
                                   hr()
                  ),
@@ -64,8 +64,8 @@ shinyUI(fluidPage(theme = "styles.css",
                  conditionalPanel(condition = "input.name_disease_4 != ''",
                                   fluidRow(
                                     column(width = 4, numericInput("prevalence_dis_4", "Prevalence (%)", value = 1, min = 0, max = 100)),
-                                    column(width = 4, sliderInput("sensitivity_dis_4", "Sensitivity", value = 69, min = 0, max = 100)),
-                                    column(width = 4, sliderInput("specificity_dis_4", "Specificity", value = 90, min = 0, max = 100))
+                                    column(width = 4, sliderInput("sensitivity_dis_4", "Sensitivity (%)", value = 69, min = 0, max = 100)),
+                                    column(width = 4, sliderInput("specificity_dis_4", "Specificity (%)", value = 90, min = 0, max = 100))
                                   ),
                                   hr()
                  ),
@@ -75,8 +75,8 @@ shinyUI(fluidPage(theme = "styles.css",
                  conditionalPanel(condition = "input.name_disease_5 != ''",
                                   fluidRow(
                                     column(width = 4, numericInput("prevalence_dis_5", "Prevalence (%)", value = 4, min = 0, max = 100)),
-                                    column(width = 4, sliderInput("sensitivity_dis_5", "Sensitivity", value = 71, min = 0, max = 100)),
-                                    column(width = 4, sliderInput("specificity_dis_5", "Specificity", value = 65, min = 0, max = 100))
+                                    column(width = 4, sliderInput("sensitivity_dis_5", "Sensitivity (%)", value = 71, min = 0, max = 100)),
+                                    column(width = 4, sliderInput("specificity_dis_5", "Specificity (%)", value = 65, min = 0, max = 100))
                                   ),
                                   hr()
                  ),
