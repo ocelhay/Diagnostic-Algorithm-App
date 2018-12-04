@@ -85,7 +85,7 @@ shinyServer(function(input, output, session) {
     
     updateTabsetPanel(session, "panels", selected = "about")
     
-    if(input$scenario == 'none'){
+    if(input$scenario == 'Custom Scenario'){
       updateTextInput(session, "name_disease_1", value = "")
       updateTextInput(session, "name_disease_2", value = "")
       updateTextInput(session, "name_disease_3", value = "")
