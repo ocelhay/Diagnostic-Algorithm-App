@@ -183,7 +183,8 @@ shinyServer(function(input, output, session) {
     
     updateTabsetPanel(session, "panels", selected = "output")
     
-    showNotification(HTML("<h2>Model Running...</h2>"), duration = NULL, type = "warning", id = "model", session = session)
+    showNotification(HTML("<h4>Model Running.</h4>"), duration = NULL, type = "warning", id = "model", session = session)
+    
     
     algo_output$data <- algo_run(
       name_disease_1 = input$name_disease_1,
@@ -213,7 +214,7 @@ shinyServer(function(input, output, session) {
       )
     
     removeNotification(id = "model", session = session)
-    showNotification(HTML("<h2>Model successfully run!</h2>"), duration = 3, type = "message")
+    showNotification(HTML("<h4>Model successfully run!</h4>"), duration = 3, type = "message")
   }
   )
   

@@ -87,7 +87,9 @@ shinyUI(fluidPage(theme = "styles.css",
                  
                  
                  conditionalPanel(condition = "input.name_disease_1 != '' & input.name_disease_2 != '' & (input.prevalence_dis_1 + input.prevalence_dis_2 + input.prevalence_dis_3 + input.prevalence_dis_4 + input.prevalence_dis_5) > 0",
-                                  bsButton("run_simul", "Run Simulation", size = "default", style = "success")
+                                  div(class = "float",
+                                  bsButton("run_simul", "Run Simulation", icon = icon("play"), size = "default", style = "success")
+                                  )
                  )
     ),
     

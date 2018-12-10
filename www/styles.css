@@ -3,3 +3,19 @@
      margin: 0 auto;
      width: 100px; 
 }
+
+.float{
+	position:fixed;
+	top:80%;
+	left:22%;
+	z-index: 9999;
+}
+
+.shiny-notification {
+    margin: auto;
+    width: 300px;
+    text-align: center;
+    position:fixed;
+    bottom: calc(2%);;
+    left: calc(45%);;
+}
