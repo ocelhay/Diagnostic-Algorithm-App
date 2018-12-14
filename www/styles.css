@@ -6,7 +6,7 @@
 
 .float{
 	position:fixed;
-	top:80%;
+	bottom: calc(2%);
 	left:22%;
 	z-index: 9999;
 }

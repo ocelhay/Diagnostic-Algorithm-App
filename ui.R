@@ -19,12 +19,10 @@ shinyUI(fluidPage(theme = "styles.css",
                              c("South East Asia", "South Central Asia", "East Africa", "Custom Scenario")),
                  
                  conditionalPanel(condition = "input.scenario == 'Custom Scenario'",
-                                  p("Add two of five diseases below and, for each disease, provide a name as well as estimates for prevalence, sensitivity and specificity."),
-                                  p("Once a minimum of two diseases have been added",  tags$u("and"),  "at least one prevalence is non-null, you can run the simulation.")),
+                                  p("Add two of five diseases below and, for each disease, provide a name as well as estimates for prevalence, sensitivity and specificity. Once a minimum of two diseases have been added",  tags$u("and"),  "at least one prevalence is non-null, you can run the simulation.")),
                  
                  conditionalPanel(condition = "input.scenario != 'Custom Scenario'",
-                                  p("These are starting point values that can be modified."),
-                                  p("We use pooled estimates taken from ", a("Etiology of Severe Febrile Illness in Low- and Middle-Income Countries: A Systematic Review.", href = "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0127962"))
+                                  p("These are starting point values that can be modified. We use pooled estimates taken from ", a("Etiology of Severe Febrile Illness in Low- and Middle-Income Countries: A Systematic Review.", href = "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0127962"))
                  ),
                  hr(),
                  textInput("name_disease_1", "Disease #1", width = "50%"),
@@ -102,8 +100,15 @@ shinyUI(fluidPage(theme = "styles.css",
                            p("This application allows for the prediction of the best diagnostic algorithm based on the correct identification of the diseases."),
                            p("It is especially relevant for the application of rapid diagnostic tests in the diagnosis of Acute Undifferentiated Febrile Illness in the community and primary healthcare facilities of developing countries, where clinical expertise is not available and differentiation of illnesses is dependent on rapid tests’ results. However the algorithm can also be adapted for other conditions which share similar properties in diagnosis."),
                            p(" The application accounts for a maximum of five diseases, takes as inputs the diseases’ prevalence and accuracy of a diagnostic test for each of them. For every algorithm it predicts the correct identification of each illness and positive predictive values. It uses Monte-Carlo simulation approach and runs 10000 simulations for each algorithm."),
-                           h4("TODO: Add Credit"),
-                           p("Sunil, Sabine, Karell, Olivier, Lisa with emails")
+                           br(),
+                           h4("Authors"),
+                           p(a("Sunil Pokharel", href = "mailto:sunildrp@gmail.com"),
+                             ", ",
+                             a("Sabine Dittrich", href = "mailto:Sabine.Dittrich@finddx.org"),
+                             ",",
+                             a("Olivier Celhay", href = "mailto:olivier.celhay@gmail.com"),
+                             "(App development),",
+                             a("Lisa J. White", href = "mailto:Lisa@tropmedres.ac"))
                   ),
                   tabPanel("Output", value = "output",
                            conditionalPanel(condition = "input.run_simul > 0",
