@@ -280,8 +280,7 @@ shinyServer(function(input, output, session) {
                         input$name_disease_4 != "", input$name_disease_5 != ""))
     if(input$max_display == "Show top 10") df <- algo_output$data$d3 %>% top_n(n = nb_disease*10, wt = `Correctly Diagnosed`)
     
-    print("Selected df:")
-    print(df)
+    dput(df)
       
     ggplot(df %>% mutate(`Test Name` = factor(`Test Name`, levels = lev)), aes(x = reorder(Algorithm, -`Correctly Diagnosed`), y = `Correctly Diagnosed Test`, fill = `Test Name`, group = -Position)) +
       geom_bar(position = "stack", stat = "identity") +
