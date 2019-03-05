@@ -13,9 +13,10 @@
 
 .shiny-notification {
     margin: auto;
-    width: 300px;
+    width: 400px;
     text-align: center;
     position:fixed;
-    bottom: calc(2%);;
-    left: calc(45%);;
+    opacity: 1;
+    bottom: calc(2%);
+    left: calc(45%);
 }

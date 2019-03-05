@@ -11,6 +11,18 @@ source("./www/algo_run.R")
 
 shinyServer(function(input, output, session) {
   
+  # Show disclaimer on app startup and remove when user accept
+  observe({
+    showNotification(id = "disclaimer_message", includeMarkdown("./www/disclaimer.md"),
+                     duration = NULL, closeButton = FALSE, type = "warning", action = actionButton("understand_disclaimer", "I understand and wish to continue.")
+    )
+  })
+  
+  observeEvent(input$understand_disclaimer, {
+    removeNotification("disclaimer_message")
+  })
+  
+  
   # Alert message if the name for diseases 1 or 2 is blank
   observeEvent(input$name_disease_1, {
     feedbackDanger(
