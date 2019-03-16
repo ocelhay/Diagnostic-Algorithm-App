@@ -5,9 +5,9 @@ account: moru
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 526535
-bundleId: 1917524
+bundleId: 1920062
 url: https://moru.shinyapps.io/diagnostic-algorithm-app/
-when: 1551805799.73674
+when: 1551888894.9295
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: .gitattributes|README.md|www/.DS_Store
