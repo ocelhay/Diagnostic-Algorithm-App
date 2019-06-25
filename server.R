@@ -283,29 +283,61 @@ shinyServer(function(input, output, session) {
   output$plot_algo <- renderPlot({
     req(input$run_simul)
     
-    lev <- c(input$name_disease_1, input$name_disease_2, input$name_disease_3, input$name_disease_4, input$name_disease_5)
+    lev <- c(input$name_disease_1, input$name_disease_2, input$name_disease_3, 
+             input$name_disease_4, input$name_disease_5)
     lev <- lev[lev != ""]
-    
-    if(input$max_display == "Show all algos") df <- algo_output$data$d3
-    
+
     nb_disease <- sum(c(input$name_disease_1 != "", input$name_disease_2 != "", input$name_disease_3 != "", 
                         input$name_disease_4 != "", input$name_disease_5 != ""))
-    if(input$max_display == "Show top 10") df <- algo_output$data$d3 %>% top_n(n = nb_disease*10, wt = `Correctly Diagnosed`)
     
-    dput(df)
+    if(input$max_display == "Show all algos") {
+      df <- algo_output$data$d3
+      lab_fil <- 10
+    }
+    
+    if(input$max_display == "Show top 10") {
+      df <- algo_output$data$d3 %>% 
+      top_n(n = 10 * nb_disease, wt = `Correctly Diagnosed`)
+      lab_fil <- 1
+    }
       
-    ggplot(df %>% mutate(`Test Name` = factor(`Test Name`, levels = lev)), aes(x = reorder(Algorithm, -`Correctly Diagnosed`), y = `Correctly Diagnosed Test`, fill = `Test Name`, group = -Position)) +
+    ggplot(df %>% mutate(`Test Name` = factor(`Test Name`, levels = lev)), 
+           aes(x = reorder(Algorithm, -`Correctly Diagnosed`), y = `Correctly Diagnosed Test`, fill = `Test Name`, group = -Position)) +
       geom_bar(position = "stack", stat = "identity") +
       geom_label(data = df %>% 
                   filter(Position == 1) %>%
-                  filter(row_number() %% 4 == 1), 
+                  filter(row_number() == 1 | row_number() %% lab_fil == 0), 
                 aes(y = `Correctly Diagnosed`, label = round(`Correctly Diagnosed`, 2)), fill = 'grey', nudge_y = 0.02) +
       scale_fill_brewer(palette = "Set1") + 
-      labs(title = "Algorithms from best to worst", sub = "limited to 30 best algorithms", x = NULL, y = "Proportions of cases correctly diagnosed",
-           fill = "Disease", subtitle = "Each columns in figure represents an algorithm. \n The algorithms are arranged from left to right in decreasing order for their correct diagnosis score. \n The stacked bars in each columns represent the tests done in order from bottom to top. \n The length of the each bar represents the contribution of each test to total correct diagnosis.") +
+      scale_x_discrete(expand = c(0.05, 0.05)) +
+      labs(title = "Algorithms from Best to Worst", 
+           x = NULL, y = "Proportions of cases correctly diagnosed",
+           fill = "Disease", subtitle = "Each column represents an algorithm.\nThe algorithms are arranged from left to right in decreasing order for their correct diagnosis score.\nThe stacked bars in each columns represent the tests done in order from bottom to top.\nThe length of the each bar represents the contribution of each test to total correct diagnosis.") +
       theme_bw(base_size = 14) +
       theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position = "left") +
       coord_cartesian(ylim = c(0, 1))
   })
+  
+  
+  # output$plot_comparison_algo <- renderPlot({
+  #   x$Algorithm[c(1, 2)]
+  #   
+  #   x2 <- x %>%
+  #     filter(Algorithm %in% c(x$Algorithm[1], x$Algorithm[6]))
+  #   
+  #   x2$Algorithm[x2$Algorithm == x$Algorithm[1]] <- "Algo A"
+  #   x2$Algorithm[x2$Algorithm == x$Algorithm[6]] <- "Algo B"
+  #   
+  #   
+  #   ggplot(data = x2, aes(x = Algorithm, y = `Correctly Diagnosed Test`)) +
+  #     geom_bar(stat = "identity") +
+  #     facet_wrap(~ `Test Name`, nrow = 1) +
+  #     coord_cartesian(ylim = c(0, 1)) +
+  #     geom_label(aes(y = `Correctly Diagnosed Test`, label = round(`Correctly Diagnosed Test`, 3)), nudge_y = 0.04) +
+  #     theme_bw(base_size = 14) +
+  #     labs(title = 'Comparison of two Algorithms', 
+  #          subtitle = 'Algo A = Dengue, Scrub, Typhoid, Malaria, Leptospira\nAlgo B = Dengue, Malaria, Scrub, Leptospira, Typhoid',
+  #          y = 'Correctly Diagnosed Test')
+  # })
   
 })
