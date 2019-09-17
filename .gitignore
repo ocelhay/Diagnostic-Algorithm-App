@@ -2,3 +2,4 @@
 .DS_Store
 *.dcf
 rsconnect/shinyapps.io/moru/diagnostic-algorithm-app.dcf
+*.dcf
